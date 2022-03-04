@@ -15,7 +15,7 @@ services:
     networks:
       - net
   php-fpm:
-    image: php:7.4-fpm
+    build: docker/php-fpm
     container_name: bookslib_php-fpm
     working_dir: /var/www/html/
     volumes:
