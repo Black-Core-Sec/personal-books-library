@@ -19,7 +19,7 @@ rm:
 
 ### EXEC
 
-# Use - make s_cli command="{command}"
-# Ex: make s_cli command="check:requirements"
-s_cli:
-	docker exec -it bookslib_php-fpm ./symfony $(command)
+# Use - make php c="{command}"
+# Ex: make php c="php --version"
+php:
+	docker exec -it bookslib_php-fpm $(c)

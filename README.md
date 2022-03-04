@@ -1,8 +1,14 @@
-Используйте команды "make" для удобства:
+"Личная библеотека книг"
+***
+### Используйте команды "make" для удобства:
  - make up | для поднятия окружения
  - make down | для удаления окружения
  - make stop | для остановки
  - make restart | для рестарта
  - make build | для билда
  - make rm | для удаления
- - make s_cli command="{command}" | для команд symfony cli
+ - make php c="{command}" | для команд php-fpm
+***
+
+Если появились проблемы с правами на запись директорию кеша и логов, то выполните команду - 
+```make php c="chown www-data:www-data -R ./var/cache/ ./var/log/"```
