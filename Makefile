@@ -23,3 +23,6 @@ rm:
 # Ex: make php c="php --version"
 php:
 	docker exec -it bookslib_php-fpm $(c)
+
+console:
+	docker exec -it bookslib_php-fpm php bin/console $(c)
