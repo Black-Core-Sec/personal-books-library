@@ -213,6 +213,9 @@
             "config/packages/sensio_framework_extra.yaml"
         ]
     },
+    "sunrise/slugger": {
+        "version": "v2.1.1"
+    },
     "symfony/asset": {
         "version": "v4.4.37"
     },

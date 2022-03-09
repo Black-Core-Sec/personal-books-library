@@ -1,0 +1,49 @@
+{% extends 'base.html.twig' %}
+
+{% block title %}Book index{% endblock %}
+
+{% block body %}
+    <h1>Book index</h1>
+    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+        <a href="{{ path('app_book_new') }}">Create new</a>
+    {% endif %}
+    <table class="table">
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Name</th>
+                <th>Author</th>
+                <th>Cover</th>
+                <th>File</th>
+                <th>Last_read_datetime</th>
+                <th>Is_downloadable</th>
+                <th>actions</th>
+            </tr>
+        </thead>
+        <tbody>
+        {% for book in books %}
+            <tr>
+                <td>{{ book.id }}</td>
+                <td>{{ book.name }}</td>
+                <td>{{ book.author }}</td>
+                <td>{{ book.cover }}</td>
+                <td>{{ book.file }}</td>
+                <td>{{ book.lastReadDatetime ? book.lastReadDatetime|date('Y-m-d H:i:s') : '' }}</td>
+                <td>{{ book.isDownloadable ? 'Yes' : 'No' }}</td>
+                <td>
+                    <a href="{{ path('app_book_show', {'id': book.id}) }}">show</a>
+                    {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
+                        <a href="{{ path('app_book_edit', {'id': book.id}) }}">edit</a>
+                    {% endif %}
+                </td>
+            </tr>
+        {% else %}
+            <tr>
+                <td colspan="8">no records found</td>
+            </tr>
+        {% endfor %}
+        </tbody>
+    </table>
+
+
+{% endblock %}
