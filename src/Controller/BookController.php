@@ -23,7 +23,11 @@ class BookController extends AbstractController
     public function index(BookRepository $bookRepository): Response
     {
         return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->findAll(),
+            'books' => $bookRepository
+                ->createQueryBuilder('b')
+                ->orderBy('b.last_read_datetime')
+                ->getQuery()
+                ->execute(),
         ]);
     }
 
@@ -42,13 +46,13 @@ class BookController extends AbstractController
             try {
                 $bookFile = $form->get('file')->getData();
                 if ($bookFile) {
-                    $bookFilename = $fileUploader->uploadCover($bookFile);
+                    $bookFilename = $fileUploader->uploadBook($bookFile);
                     $book->setFile($bookFilename);
                 }
 
                 $coverFile = $form->get('cover')->getData();
                 if ($coverFile) {
-                    $coverFilename = $fileUploader->uploadBook($coverFile);
+                    $coverFilename = $fileUploader->uploadCover($coverFile);
                     $book->setCover($coverFilename);
                 }
             } catch (\Exception $e) {

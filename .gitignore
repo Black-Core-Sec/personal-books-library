@@ -10,6 +10,8 @@
 /public/bundles/
 /var/
 /vendor/
+/public/assets/uploads/book/files/
+/public/assets/uploads/book/covers/
 ###< symfony/framework-bundle ###
 
 ###> symfony/phpunit-bridge ###

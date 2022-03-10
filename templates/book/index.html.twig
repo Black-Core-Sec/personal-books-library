@@ -10,7 +10,6 @@
     <table class="table">
         <thead>
             <tr>
-                <th>Id</th>
                 <th>Name</th>
                 <th>Author</th>
                 <th>Cover</th>
@@ -23,13 +22,18 @@
         <tbody>
         {% for book in books %}
             <tr>
-                <td>{{ book.id }}</td>
                 <td>{{ book.name }}</td>
                 <td>{{ book.author }}</td>
-                <td>{{ book.cover }}</td>
-                <td>{{ book.file }}</td>
+                <td>{{ bookCoverImg(book.cover, book.name) }}</td>
+                <td>
+                {% if book.isDownloadable %}
+                    {{ bookFileLink(book.file) }}
+                {% endif %}
+                </td>
+
                 <td>{{ book.lastReadDatetime ? book.lastReadDatetime|date('Y-m-d H:i:s') : '' }}</td>
                 <td>{{ book.isDownloadable ? 'Yes' : 'No' }}</td>
+
                 <td>
                     <a href="{{ path('app_book_show', {'id': book.id}) }}">show</a>
                     {% if is_granted("IS_AUTHENTICATED_REMEMBERED") %}
@@ -44,6 +48,4 @@
         {% endfor %}
         </tbody>
     </table>
-
-
 {% endblock %}

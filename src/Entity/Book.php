@@ -4,6 +4,7 @@ namespace App\Entity;
 
 use App\Repository\BookRepository;
 use Doctrine\ORM\Mapping as ORM;
+use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
  * @ORM\Table(
@@ -12,6 +13,12 @@ use Doctrine\ORM\Mapping as ORM;
  *        @ORM\UniqueConstraint(name="name_author_unique", columns={"name", "author"})
  *    }
  * )
+ *
+ * @UniqueEntity(
+ *     fields={"name", "author"},
+ *     message="Duplicated name-author combination"
+ * )
+ *
  * @ORM\Entity(repositoryClass=BookRepository::class)
  */
 class Book
