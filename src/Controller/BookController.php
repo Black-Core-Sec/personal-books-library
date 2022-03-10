@@ -23,11 +23,7 @@ class BookController extends AbstractController
     public function index(BookRepository $bookRepository): Response
     {
         return $this->render('book/index.html.twig', [
-            'books' => $bookRepository
-                ->createQueryBuilder('b')
-                ->orderBy('b.last_read_datetime')
-                ->getQuery()
-                ->execute(),
+            'books' => $bookRepository->getAllSortingByLastReadDatetime()
         ]);
     }
 

@@ -45,6 +45,18 @@ class BookRepository extends ServiceEntityRepository
         }
     }
 
+    /**
+     * @param bool $isAscSortingDirection
+     * @return array
+     */
+    public function getAllSortingByLastReadDatetime(bool $isAscSortingDirection = true): array
+    {
+        return $this->createQueryBuilder('b')
+            ->orderBy('b.last_read_datetime', $isAscSortingDirection?'ASC':'DESC')
+            ->getQuery()
+            ->getResult();
+    }
+
     // /**
     //  * @return Book[] Returns an array of Book objects
     //  */
