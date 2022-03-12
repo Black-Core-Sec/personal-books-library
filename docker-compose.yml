@@ -26,6 +26,8 @@ services:
       - ./docker/logs/:/var/log/php/
     ports:
       - "9000:9000"
+    depends_on:
+      - redis
     networks:
       - net
   db:
@@ -38,6 +40,14 @@ services:
       POSTGRES_PASSWORD: "${DB_ROOT_PASSWORD}"
     ports:
       - "${DB_PORT}:5432"
+    networks:
+      - net
+  redis:
+    image: redis
+    container_name: bookslib_redis
+    restart: always
+    ports:
+      - "${REDIS_PORT}:6379"
     networks:
       - net
 networks:

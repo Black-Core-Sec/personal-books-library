@@ -16,6 +16,8 @@ use Doctrine\Persistence\ManagerRegistry;
  */
 class BookRepository extends ServiceEntityRepository
 {
+    public const LIST_CACHE_KEY = 'books_list';
+
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Book::class);

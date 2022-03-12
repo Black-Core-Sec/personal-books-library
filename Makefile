@@ -26,3 +26,6 @@ php:
 
 console:
 	docker exec -it bookslib_php-fpm php bin/console $(c)
+
+migrate:
+	docker exec -it bookslib_php-fpm php bin/console doctrine:migrations:migrate

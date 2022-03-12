@@ -4,13 +4,15 @@ namespace App\Controller;
 
 use App\Entity\Book;
 use App\Form\BookType;
+use App\Service\FileUploader;
 use App\Repository\BookRepository;
-use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
-use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
+use Symfony\Contracts\Cache\CacheInterface;
+use Symfony\Contracts\Cache\ItemInterface;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
-use App\Service\FileUploader;
+use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
+use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 
 /**
  * @Route("/book")
@@ -20,10 +22,15 @@ class BookController extends AbstractController
     /**
      * @Route("/", name="app_book_index", methods={"GET"})
      */
-    public function index(BookRepository $bookRepository): Response
+    public function index(BookRepository $bookRepository, CacheInterface $booksCache): Response
     {
+        $books = $booksCache->get($bookRepository::LIST_CACHE_KEY, function (ItemInterface $item) use ($bookRepository) {
+            $item->expiresAfter(3600);
+            return $bookRepository->getAllSortingByLastReadDatetime();
+        });
+
         return $this->render('book/index.html.twig', [
-            'books' => $bookRepository->getAllSortingByLastReadDatetime()
+            'books' => $books
         ]);
     }
 
