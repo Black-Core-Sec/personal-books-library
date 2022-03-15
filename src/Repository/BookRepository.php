@@ -1,12 +1,16 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Repository;
 
 use App\Entity\Book;
-use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
-use Doctrine\ORM\OptimisticLockException;
+use App\Events\BookEvent;
+use App\EventSubscriber\BooksEventsSubscriber;
 use Doctrine\ORM\ORMException;
+use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
+use Symfony\Component\EventDispatcher\EventDispatcher;
+use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**
  * @method Book|null find($id, $lockMode = null, $lockVersion = null)
@@ -18,9 +22,13 @@ class BookRepository extends ServiceEntityRepository
 {
     public const LIST_CACHE_KEY = 'books_list';
 
-    public function __construct(ManagerRegistry $registry)
+    private $dispatcher;
+
+    public function __construct(ManagerRegistry $registry, EventDispatcher $dispatcher, BooksEventsSubscriber $booksEventsSubscriber)
     {
         parent::__construct($registry, Book::class);
+        $this->dispatcher = $dispatcher;
+        $this->dispatcher->addSubscriber($booksEventsSubscriber);
     }
 
     /**
@@ -44,6 +52,8 @@ class BookRepository extends ServiceEntityRepository
         $this->_em->remove($entity);
         if ($flush) {
             $this->_em->flush();
+            $event = new BookEvent($entity);
+            $this->dispatcher->dispatch($event, BookEvent::REMOVED);
         }
     }
 
@@ -58,33 +68,4 @@ class BookRepository extends ServiceEntityRepository
             ->getQuery()
             ->getResult();
     }
-
-    // /**
-    //  * @return Book[] Returns an array of Book objects
-    //  */
-    /*
-    public function findByExampleField($value)
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('b.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
-        ;
-    }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Book
-    {
-        return $this->createQueryBuilder('b')
-            ->andWhere('b.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

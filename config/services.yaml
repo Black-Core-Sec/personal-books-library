@@ -4,8 +4,8 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    bookFilesDirectory: '%kernel.project_dir%/public/assets/uploads/book/files'
-    bookCoversDirectory: '%kernel.project_dir%/public/assets/uploads/book/covers'
+    bookFilesDirectory: '%kernel.project_dir%/public/assets/uploads/book/files/'
+    bookCoversDirectory: '%kernel.project_dir%/public/assets/uploads/book/covers/'
 
 services:
     # default configuration for services in *this* file
@@ -40,6 +40,18 @@ services:
                 coverDirectory: '%bookCoversDirectory%'
 
     Sunrise\Slugger\Slugger:
+    Symfony\Component\EventDispatcher\EventDispatcher:
+    Symfony\Component\Filesystem\Filesystem:
+    App\Entity\BookCover:
+        arguments:
+            $fileDirectory: '%bookCoversDirectory%'
+    App\Entity\BookFile:
+        arguments:
+            $fileDirectory: '%bookFilesDirectory%'
+    App\EventSubscriber\BooksEventsSubscriber:
+        tags:
+            - { name: kernel.event_subscriber }
+
 
     # Need to clear cache before add\update\remove book entity
     App\EventListener\BooksEventsListener:
