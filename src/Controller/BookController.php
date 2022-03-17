@@ -60,9 +60,7 @@ class BookController extends AbstractController
                     $book->setCover($coverFilename);
                 }
             } catch (\Exception $e) {
-                // @TODO Prepare normal error page
-                // return $this->handleException($e, $request);
-                dd($e);
+                 dd($e);
             }
 
             $bookRepository->add($book);
@@ -90,12 +88,28 @@ class BookController extends AbstractController
      * @Route("/{id}/edit", name="app_book_edit", methods={"GET", "POST"})
      * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
      */
-    public function edit(Request $request, Book $book, BookRepository $bookRepository): Response
+    public function edit(Request $request, Book $book, BookRepository $bookRepository, FileUploader $fileUploader): Response
     {
         $form = $this->createForm(BookType::class, $book);
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
+            try {
+                $bookFile = $form->get('file')->getData();
+                if ($bookFile) {
+                    $bookFilename = $fileUploader->uploadBook($bookFile);
+                    $book->setFile($bookFilename);
+                }
+
+                $coverFile = $form->get('cover')->getData();
+                if ($coverFile) {
+                    $coverFilename = $fileUploader->uploadCover($coverFile);
+                    $book->setCover($coverFilename);
+                }
+            } catch (\Exception $e) {
+                dd($e);
+            }
+
             $bookRepository->add($book);
             return $this->redirectToRoute('app_book_index', [], Response::HTTP_SEE_OTHER);
         }
@@ -117,5 +131,27 @@ class BookController extends AbstractController
         }
 
         return $this->redirectToRoute('app_book_index', [], Response::HTTP_SEE_OTHER);
+    }
+
+    /**
+     * @Route("/{id}/file", name="app_book_file_delete", methods={"DELETE"})
+     * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+     */
+    public function removeFile(Request $request, Book $book, BookRepository $bookRepository)
+    {
+        $book->setFile('');
+        $bookRepository->add($book);
+        return $this->json('Success');
+    }
+
+    /**
+     * @Route("/{id}/cover", name="app_book_cover_delete", methods={"DELETE"})
+     * @IsGranted("IS_AUTHENTICATED_REMEMBERED")
+     */
+    public function removeCover(Request $request, Book $book, BookRepository $bookRepository)
+    {
+        $book->setCover('');
+        $bookRepository->add($book);
+        return $this->json('Success');
     }
 }

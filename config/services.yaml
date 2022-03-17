@@ -42,16 +42,17 @@ services:
     Sunrise\Slugger\Slugger:
     Symfony\Component\EventDispatcher\EventDispatcher:
     Symfony\Component\Filesystem\Filesystem:
+
     App\Entity\BookCover:
         arguments:
             $fileDirectory: '%bookCoversDirectory%'
     App\Entity\BookFile:
         arguments:
             $fileDirectory: '%bookFilesDirectory%'
+
     App\EventSubscriber\BooksEventsSubscriber:
         tags:
             - { name: kernel.event_subscriber }
-
 
     # Need to clear cache before add\update\remove book entity
     App\EventListener\BooksEventsListener:

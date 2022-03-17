@@ -1,4 +1,24 @@
+{% use "bootstrap_base_layout.html.twig" %}
+
 {{ form_start(form) }}
-    {{ form_widget(form) }}
+
+    {{ form_row(form.name) }}
+    {{ form_row(form.author) }}
+
+    {% if book.cover %}
+        {{ bookCoverImg(book.cover, book.name) }}
+        <input type="button" id="removeCover" data-file-type="cover" value="Remove cover" onclick="removeBookFile(this)">
+    {% endif %}
+    {{ form_row(form.cover) }}
+
+    {% if book.file %}
+        {{ bookFileLink(book.file) }}
+        <input type="button" id="removeFile" data-file-type="file" value="Remove file" onclick="removeBookFile(this)">
+    {% endif %}
+    {{ form_row(form.file) }}
+
+    {{ form_row(form.last_read_datetime) }}
+    {{ form_row(form.is_downloadable) }}
+
     <button class="btn">{{ button_label|default('Save') }}</button>
 {{ form_end(form) }}

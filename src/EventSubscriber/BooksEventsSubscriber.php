@@ -22,13 +22,25 @@ class BooksEventsSubscriber implements EventSubscriberInterface
     public static function getSubscribedEvents(): array
     {
         return [
-            BookEvent::REMOVED => ['onBookRemoved', 10],
+            BookEvent::REMOVED => ['onBookRemoved', 0],
+            BookEvent::FILE_CHANGED => ['onFileChanged', 0],
+            BookEvent::COVER_CHANGED => ['onCoverChanged', 0],
         ];
     }
 
-    public function onBookRemoved(BookEvent $event)
+    public function onBookRemoved(BookEvent $event): void
     {
         $this->bookCover->remove($event->getBook()->getCover());
         $this->bookFile->remove($event->getBook()->getFile());
+    }
+
+    public function onFileChanged(BookEvent $event): void
+    {
+        $this->bookCover->remove($event->getBook()->getCover());
+    }
+
+    public function onCoverChanged(BookEvent $event): void
+    {
+        $this->bookCover->remove($event->getBook()->getCover());
     }
 }

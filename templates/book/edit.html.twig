@@ -11,3 +11,24 @@
 
     {{ include('book/_delete_form.html.twig') }}
 {% endblock %}
+
+{% block javascripts %}
+    {{ parent() }}
+    <script>
+        function removeBookFile(e) {
+            console.log(e.dataset.fileType);
+            let url;
+            if (e.dataset.fileType === 'file') {
+                url = '{{ path('app_book_file_delete', {id: book.id}) }}';
+            } else {
+                url = '{{ path('app_book_cover_delete', {id: book.id}) }}';
+            }
+            $.ajax({
+                url: url,
+                method: 'DELETE'
+            }).done(function () {
+                location.reload();
+            })
+        }
+    </script>
+{% endblock %}
