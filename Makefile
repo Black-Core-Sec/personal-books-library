@@ -29,3 +29,6 @@ console:
 
 migrate:
 	docker exec -it bookslib_php-fpm php bin/console doctrine:migrations:migrate
+
+user:
+	docker exec -it bookslib_php-fpm php bin/console fos:user:create
