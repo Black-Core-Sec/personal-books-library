@@ -16,16 +16,20 @@ services:
     # makes classes in src/ available to be used as services
     # this creates a service per class whose id is the fully-qualified class name
     App\:
-        resource: '../src/'
+        resource: '../src/App'
         exclude:
-            - '../src/DependencyInjection/'
-            - '../src/Entity/'
-            - '../src/Kernel.php'
+            - '../src/App/DependencyInjection/'
+            - '../src/App/Entity/'
+            - '../src/App/Kernel.php'
 
     # controllers are imported separately to make sure services can be injected
     # as action arguments even if you don't extend any base controller class
     App\Controller\:
-        resource: '../src/Controller/'
+        resource: '../src/App/Controller/'
+        tags: ['controller.service_arguments']
+
+    Api\Controller\:
+        resource: '../src/Api/Controller/'
         tags: ['controller.service_arguments']
 
     # add more service definitions when explicit configuration is needed
@@ -39,6 +43,7 @@ services:
                 bookDirectory: '%bookFilesDirectory%'
                 coverDirectory: '%bookCoversDirectory%'
 
+#    JMS\Serializer\SerializerBuilder:
     Sunrise\Slugger\Slugger:
     Symfony\Component\EventDispatcher\EventDispatcher:
     Symfony\Component\Filesystem\Filesystem:

@@ -1,7 +1,11 @@
 controllers:
-    resource: ../../src/Controller/
+    resource: ../../src/App/Controller/
+    type: annotation
+
+api-controllers:
+    resource: ../../src/Api/Controller/BookController.php
     type: annotation
 
 kernel:
-    resource: ../../src/Kernel.php
+    resource: ../../src/App/Kernel.php
     type: annotation
