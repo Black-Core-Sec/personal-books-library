@@ -2,9 +2,11 @@
 
 namespace App\Entity;
 
-use App\Repository\BookRepository;
+use JMS\Serializer\Annotation;
 use Doctrine\ORM\Mapping as ORM;
+use App\Repository\BookRepository;
 use ApiPlatform\Core\Annotation\ApiResource;
+use Symfony\Component\Validator\Constraints as Assert;
 use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
 
 /**
@@ -22,6 +24,8 @@ use Symfony\Bridge\Doctrine\Validator\Constraints\UniqueEntity;
  *
  * @ORM\Entity(repositoryClass=BookRepository::class)
  * @ApiResource()
+ *
+ * @Annotation\ExclusionPolicy("none")
  */
 class Book
 {
@@ -34,31 +38,41 @@ class Book
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotBlank
+     * @Annotation\Expose()
+     * @Annotation\Type("string")
      */
     private $name;
 
     /**
      * @ORM\Column(type="string", length=255)
+     * @Assert\NotNull
+     * @Annotation\Expose()
+     * @Annotation\Type("string")
      */
     private $author;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $cover;
 
     /**
-     * @ORM\Column(type="text")
+     * @ORM\Column(type="text", nullable=true)
      */
     private $file;
 
     /**
      * @ORM\Column(type="datetime", nullable=true)
+     * @Annotation\Expose()
+     * @Annotation\Type("DateTime<'d-m-Y\Th:i:s'>")
      */
     private $last_read_datetime;
 
     /**
      * @ORM\Column(type="boolean")
+     * @Annotation\Expose()
+     * @Annotation\Type("boolean")
      */
     private $is_downloadable;
 
@@ -96,7 +110,7 @@ class Book
         return $this->cover;
     }
 
-    public function setCover(string $cover): self
+    public function setCover(?string $cover): self
     {
         $this->cover = $cover;
 
@@ -108,7 +122,7 @@ class Book
         return $this->file;
     }
 
-    public function setFile(string $file): self
+    public function setFile(?string $file): self
     {
         $this->file = $file;
 

@@ -3,7 +3,7 @@ controllers:
     type: annotation
 
 api-controllers:
-    resource: ../../src/Api/Controller/BookController.php
+    resource: ../../src/Api/Controller/
     type: annotation
 
 kernel:

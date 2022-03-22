@@ -43,7 +43,7 @@ services:
                 bookDirectory: '%bookFilesDirectory%'
                 coverDirectory: '%bookCoversDirectory%'
 
-#    JMS\Serializer\SerializerBuilder:
+    JMS\Serializer\SerializerBuilder:
     Sunrise\Slugger\Slugger:
     Symfony\Component\EventDispatcher\EventDispatcher:
     Symfony\Component\Filesystem\Filesystem:

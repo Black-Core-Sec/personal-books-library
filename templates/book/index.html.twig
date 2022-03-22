@@ -24,9 +24,13 @@
             <tr>
                 <td>{{ book.name }}</td>
                 <td>{{ book.author }}</td>
-                <td>{{ bookCoverImg(book.cover, book.name) }}</td>
                 <td>
-                {% if book.isDownloadable %}
+                    {% if book.cover %}
+                        {{ bookCoverImg(book.cover, book.name) }}
+                    {% endif %}
+                </td>
+                <td>
+                {% if book.file and book.isDownloadable %}
                     {{ bookFileLink(book.file) }}
                 {% endif %}
                 </td>

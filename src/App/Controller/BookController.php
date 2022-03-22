@@ -46,7 +46,6 @@ class BookController extends AbstractController
         $form->handleRequest($request);
 
         if ($form->isSubmitted() && $form->isValid()) {
-
             try {
                 $bookFile = $form->get('file')->getData();
                 if ($bookFile) {
@@ -139,7 +138,7 @@ class BookController extends AbstractController
      */
     public function removeFile(Request $request, Book $book, BookRepository $bookRepository)
     {
-        $book->setFile('');
+        $book->setFile(null);
         $bookRepository->add($book);
         return $this->json('Success');
     }
@@ -150,7 +149,7 @@ class BookController extends AbstractController
      */
     public function removeCover(Request $request, Book $book, BookRepository $bookRepository)
     {
-        $book->setCover('');
+        $book->setCover(null);
         $bookRepository->add($book);
         return $this->json('Success');
     }

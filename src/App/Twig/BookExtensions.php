@@ -10,7 +10,7 @@ use Twig\Extension\RuntimeExtensionInterface;
  */
 class BookExtensions implements RuntimeExtensionInterface
 {
-    public function renderBookCoverImage(string $name, string $alt_text = ''): \Twig\Markup
+    public function renderBookCoverImage(?string $name, string $alt_text = ''): \Twig\Markup
     {
         return new \Twig\Markup("<img src=\"/assets/uploads/book/covers/{$name}\" alt=\"$alt_text\" width='80px'>", 'UTF-8' );
     }

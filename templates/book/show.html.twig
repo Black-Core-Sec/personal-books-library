@@ -20,7 +20,7 @@
                 <td>{{ bookCoverImg(book.cover, book.name) }}</td>
             </tr>
             <tr>
-                {% if book.isDownloadable %}
+                {% if book.file and book.isDownloadable %}
                     <th>File</th>
                     <td>
                         {{ bookFileLink(book.file) }}
