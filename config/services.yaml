@@ -4,8 +4,10 @@
 # Put parameters here that don't need to change on each machine where the app is deployed
 # https://symfony.com/doc/current/best_practices/configuration.html#application-related-configuration
 parameters:
-    bookFilesDirectory: '%kernel.project_dir%/public/assets/uploads/book/files/'
-    bookCoversDirectory: '%kernel.project_dir%/public/assets/uploads/book/covers/'
+    bookRelativeFilesDirectory: '/assets/uploads/book/files/'
+    bookRelativeCoversDirectory: '/assets/uploads/book/covers/'
+    bookAbsoluteFilesDirectory: '%kernel.project_dir%/public%bookRelativeFilesDirectory%'
+    bookAbsoluteCoversDirectory: '%kernel.project_dir%/public%bookRelativeCoversDirectory%'
 
 services:
     # default configuration for services in *this* file
@@ -40,20 +42,22 @@ services:
     App\Service\FileUploader:
         arguments:
             $directories:
-                bookDirectory: '%bookFilesDirectory%'
-                coverDirectory: '%bookCoversDirectory%'
+                bookDirectory: '%bookAbsoluteFilesDirectory%'
+                coverDirectory: '%bookAbsoluteCoversDirectory%'
 
     JMS\Serializer\SerializerBuilder:
     Sunrise\Slugger\Slugger:
     Symfony\Component\EventDispatcher\EventDispatcher:
     Symfony\Component\Filesystem\Filesystem:
 
-    App\Entity\BookCover:
-        arguments:
-            $fileDirectory: '%bookCoversDirectory%'
     App\Entity\BookFile:
         arguments:
-            $fileDirectory: '%bookFilesDirectory%'
+            $fileRelativeDirectory: '%bookRelativeFilesDirectory%'
+            $fileDirectory: '%bookAbsoluteFilesDirectory%'
+    App\Entity\BookCover:
+        arguments:
+            $fileRelativeDirectory: '%bookRelativeCoversDirectory%'
+            $fileDirectory: '%bookAbsoluteCoversDirectory%'
 
     App\EventSubscriber\BooksEventsSubscriber:
         tags:
@@ -74,3 +78,5 @@ services:
                 name: 'doctrine.orm.entity_listener'
                 event: 'postRemove'
                 entity: 'App\Entity\Book'
+
+    Api\DataTransformer\BookOutputDataTransformer:

@@ -10,16 +10,21 @@ abstract class BookFiles
     /**
      * @var string
      */
-    private $fileDirectory;
+    protected $fileDirectory;
     /**
      * @var Filesystem
      */
-    private $filesystem;
+    protected $filesystem;
+    /**
+     * @var string
+     */
+    protected $fileRelativeDirectory;
 
-    public function __construct(Filesystem $filesystem, string $fileDirectory)
+    public function __construct(Filesystem $filesystem, string $fileDirectory, string $fileRelativeDirectory)
     {
         $this->filesystem = $filesystem;
         $this->fileDirectory = $fileDirectory;
+        $this->fileRelativeDirectory = $fileRelativeDirectory;
     }
 
     public function remove(string $filename)
@@ -28,5 +33,21 @@ abstract class BookFiles
         if ($this->filesystem->exists($fullName)) {
             $this->filesystem->remove($fullName);
         }
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileDirectory(): string
+    {
+        return $this->fileDirectory;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFileRelativeDirectory(): string
+    {
+        return $this->fileRelativeDirectory;
     }
 }

@@ -5,8 +5,6 @@ namespace Api\DataTransformer;
 
 use App\Entity\Book;
 use Api\Dto\BookOutput;
-use JMS\Serializer\Annotation;
-use Symfony\Component\DependencyInjection\Container;
 
 final class BookOutputDataTransformer extends DtoTransformer
 {
@@ -16,11 +14,13 @@ final class BookOutputDataTransformer extends DtoTransformer
      */
     public function transform($data)
     {
+        $host =  $this->request->getHttpHost();
+
         $output = new BookOutput();
         $output->name = $data->getName();
         $output->author = $data->getAuthor();
-        $output->cover = $data->getCover();
-        $output->file = $data->getFile();
+        $output->cover = $data->getCover() ? $host . $this->bookCover->getFileRelativeDirectory() . $data->getCover() : null;
+        $output->file = $data->getFile() ? $host . $this->bookFile->getFileRelativeDirectory() . $data->getFile() : null;
         $output->last_read_datetime = $data->getLastReadDatetime();
         $output->is_downloadable = $data->getIsDownloadable();
 
