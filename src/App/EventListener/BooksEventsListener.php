@@ -12,14 +12,12 @@ use Symfony\Contracts\Cache\CacheInterface;
 
 class BooksEventsListener
 {
-    private $bookRepository;
     private $booksCache;
     private $bookCover;
     private $bookFile;
 
-    public function __construct(BookRepository $bookRepository, CacheInterface $booksCache, BookCover $bookCover, BookFile $bookFile)
+    public function __construct(CacheInterface $booksCache, BookCover $bookCover, BookFile $bookFile)
     {
-        $this->bookRepository = $bookRepository;
         $this->booksCache = $booksCache;
         $this->bookCover = $bookCover;
         $this->bookFile = $bookFile;
@@ -27,7 +25,7 @@ class BooksEventsListener
 
     public function postPersist(Book $book, LifecycleEventArgs $event): void
     {
-        $this->clearCache($this->bookRepository, $this->booksCache);
+        $this->clearCache();
     }
 
     public function postUpdate(Book $book, LifecycleEventArgs $event): void
@@ -36,31 +34,29 @@ class BooksEventsListener
         $entityManager = $event->getEntityManager();
 
         // Revove Cover and File if it changed
-        if ($entity instanceof Book) {
-            $changeSet = $entityManager->getUnitOfWork()->getEntityChangeSet($entity);
-            if (isset($changeSet['cover']) && $changeSet['cover'][0]) {
-                $this->bookCover->remove($changeSet['cover'][0]);
-            }
-            if (isset($changeSet['file']) && $changeSet['file'][0]) {
-                $this->bookFile->remove($changeSet['file'][0]);
-            }
+        $changeSet = $entityManager->getUnitOfWork()->getEntityChangeSet($entity);
+        if (isset($changeSet['cover']) && $changeSet['cover'][0]) {
+            $this->bookCover->remove($changeSet['cover'][0]);
         }
-        $this->clearCache($this->bookRepository, $this->booksCache);
+        if (isset($changeSet['file']) && $changeSet['file'][0]) {
+            $this->bookFile->remove($changeSet['file'][0]);
+        }
+
+        $this->clearCache();
     }
 
     public function postRemove(Book $book, LifecycleEventArgs $event): void
     {
-        $this->clearCache($this->bookRepository, $this->booksCache);
+        $this->bookFile->remove($book->getFile());
+        $this->bookCover->remove($book->getCover());
+        $this->clearCache();
     }
 
-
     /**
-     * @param BookRepository $bookRepository
-     * @param CacheInterface $booksCache
      * @throws \Psr\Cache\InvalidArgumentException
      */
-    private function clearCache(BookRepository $bookRepository, CacheInterface $booksCache): void
+    private function clearCache(): void
     {
-        $booksCache->delete($bookRepository::LIST_CACHE_KEY);
+        $this->booksCache->delete(BookRepository::LIST_CACHE_KEY);
     }
 }

@@ -22,13 +22,9 @@ class BookRepository extends ServiceEntityRepository
 {
     public const LIST_CACHE_KEY = 'books_list';
 
-    private $dispatcher;
-
-    public function __construct(ManagerRegistry $registry, EventDispatcher $dispatcher, BooksEventsSubscriber $booksEventsSubscriber)
+    public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Book::class);
-        $this->dispatcher = $dispatcher;
-        $this->dispatcher->addSubscriber($booksEventsSubscriber);
     }
 
     /**
@@ -52,8 +48,6 @@ class BookRepository extends ServiceEntityRepository
         $this->_em->remove($entity);
         if ($flush) {
             $this->_em->flush();
-            $event = new BookEvent($entity);
-            $this->dispatcher->dispatch($event, BookEvent::REMOVED);
         }
     }
 

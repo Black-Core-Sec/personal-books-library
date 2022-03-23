@@ -58,10 +58,6 @@ services:
             $fileRelativeDirectory: '%bookRelativeCoversDirectory%'
             $fileDirectory: '%bookAbsoluteCoversDirectory%'
 
-    App\EventSubscriber\BooksEventsSubscriber:
-        tags:
-            - { name: kernel.event_subscriber }
-
     # Need to clear cache before add\update\remove book entity
     App\EventListener\BooksEventsListener:
         tags:
