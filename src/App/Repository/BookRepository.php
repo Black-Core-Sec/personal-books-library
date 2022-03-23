@@ -4,7 +4,6 @@ declare(strict_types=1);
 namespace App\Repository;
 
 use App\Entity\Book;
-use App\Events\BookEvent;
 use App\EventSubscriber\BooksEventsSubscriber;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\OptimisticLockException;

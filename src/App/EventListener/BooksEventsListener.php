@@ -47,8 +47,8 @@ class BooksEventsListener
 
     public function postRemove(Book $book, LifecycleEventArgs $event): void
     {
-        $this->bookFile->remove($book->getFile());
-        $this->bookCover->remove($book->getCover());
+        !$book->getFile() ?: $this->bookFile->remove($book->getFile());
+        !$book->getCover() ?: $this->bookCover->remove($book->getCover());
         $this->clearCache();
     }
 

@@ -61,15 +61,15 @@ class BookController extends AbstractController
                 $validationErrors = $validator->validate($book);
                 if (count($validationErrors) > 0) {
                     $errorsString = (string) $validationErrors;
-                    return new JsonResponse($this->serializer->serialize($errorsString, 'json'), 500);
+                    return new JsonResponse($this->serializer->serialize($errorsString, 'json'), 400);
                 }
                 $bookRepository->add($book);
 
                 return new JsonResponse('New book added.', 200);
             } else {
-                return new JsonResponse('Error on adding book.', 500);
+                return new JsonResponse('Error on adding book.', 400);
             }
-        } catch(\Exception $exception) {
+        } catch(\Throwable $exception) {
             return new JsonResponse('Error on adding book.', 500);
         }
     }
@@ -90,12 +90,12 @@ class BookController extends AbstractController
             $validationErrors = $validator->validate($book);
             if (count($validationErrors) > 0) {
                 $errorsString = (string) $validationErrors;
-                return new JsonResponse($this->serializer->serialize($errorsString, 'json'), 500);
+                return new JsonResponse($this->serializer->serialize($errorsString, 'json'), 400);
             }
 
             $bookRepository->add($book);
             return new JsonResponse('Book updated.', 200);
-        } catch (\Exception $exception) {
+        } catch (\Throwable $exception) {
             return new JsonResponse('Error on updating book.', 500);
         }
     }
