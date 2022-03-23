@@ -1,3 +1,6 @@
+parameters:
+    api_key: '%env(API_KEY)%'
+
 security:
     encoders:
         FOS\UserBundle\Model\UserInterface: bcrypt
@@ -10,7 +13,19 @@ security:
     providers:
         fos_userbundle:
             id: fos_user.user_provider.username
+        api_users:
+            memory:
+                users:
+                    api_user: { password: '%api_key%', roles: [ 'ROLE_ADMIN' ] }
     firewalls:
+        api:
+            pattern: ^/api/v2/
+            anonymous: lazy
+            logout: ~
+            provider: api_users
+            guard:
+                authenticators:
+                    - App\Security\TokenAuthenticator
         dev:
             pattern: ^/(_(profiler|wdt)|css|images|js)/
             security: false
