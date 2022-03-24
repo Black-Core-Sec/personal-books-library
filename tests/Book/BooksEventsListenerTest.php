@@ -6,8 +6,6 @@ namespace App\Tests\Book;
 use App\Entity\Book;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
 
-use Symfony\Component\Filesystem\Filesyste;
-
 class BooksEventsListenerTest extends KernelTestCase
 {
     private $book;
@@ -48,8 +46,8 @@ class BooksEventsListenerTest extends KernelTestCase
 
     public function testCreateBookFiles()
     {
-        $this->assertTrue(file_exists($this->filePath));
-        $this->assertTrue(file_exists($this->coverPath));
+        $this->assertFileExists($this->filePath);
+        $this->assertFileExists($this->coverPath);
     }
 
     /**
@@ -59,7 +57,7 @@ class BooksEventsListenerTest extends KernelTestCase
     {
         $this->repository->remove($this->book);
 
-        $this->assertFalse(file_exists($this->filePath));
-        $this->assertFalse(file_exists($this->coverPath));
+        $this->assertFileNotExists($this->filePath);
+        $this->assertFileNotExists($this->coverPath);
     }
 }
