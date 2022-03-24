@@ -18,7 +18,7 @@ use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
  */
 class BookRepository extends ServiceEntityRepository
 {
-    public const LIST_CACHE_KEY = 'books_list';
+    public const LIST_CACHE_KEY = 'books_cache';
 
     public function __construct(ManagerRegistry $registry)
     {
