@@ -3,7 +3,6 @@ services:
   nginx:
     image: nginx
     container_name: bookslib_nginx
-    restart: always
     volumes:
       - ./:/var/www/html/
       - ./docker/nginx/nginx.conf:/etc/nginx/nginx.conf
@@ -18,7 +17,6 @@ services:
   php-fpm:
     build: docker/php-fpm
     container_name: bookslib_php-fpm
-    restart: always
     working_dir: /var/www/html/
     volumes:
       - ./:/var/www/html/
@@ -34,7 +32,6 @@ services:
   db:
     image: postgres:12
     container_name: bookslib_db
-    restart: always
     environment:
       POSTGRES_DB: "${DB_DATABASE}"
       POSTGRES_USER: "${DB_ROOT_USER}"
@@ -46,7 +43,6 @@ services:
   redis:
     image: redis
     container_name: bookslib_redis
-    restart: always
     ports:
       - "${REDIS_PORT}:6379"
     networks:

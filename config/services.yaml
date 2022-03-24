@@ -48,6 +48,7 @@ services:
     Sunrise\Slugger\Slugger:
     Symfony\Component\EventDispatcher\EventDispatcher:
     Symfony\Component\Filesystem\Filesystem:
+        public: true
 
     App\Entity\BookFile:
         arguments:

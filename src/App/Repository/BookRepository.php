@@ -8,7 +8,6 @@ use App\EventSubscriber\BooksEventsSubscriber;
 use Doctrine\ORM\ORMException;
 use Doctrine\ORM\OptimisticLockException;
 use Doctrine\Persistence\ManagerRegistry;
-use Symfony\Component\EventDispatcher\EventDispatcher;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 
 /**

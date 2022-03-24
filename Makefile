@@ -24,6 +24,9 @@ rm:
 php:
 	docker exec -it bookslib_php-fpm $(c)
 
+php-www:
+	docker exec -it --user www-data bookslib_php-fpm $(c)
+
 console:
 	docker exec -it bookslib_php-fpm php bin/console $(c)
 
@@ -32,3 +35,6 @@ migrate:
 
 user:
 	docker exec -it bookslib_php-fpm php bin/console fos:user:create
+
+testing:
+	docker exec -it bookslib_php-fpm php bin/phpunit
