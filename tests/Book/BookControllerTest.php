@@ -32,13 +32,13 @@ class BookControllerTest extends WebTestCase
      * @dataProvider additionProvider
      */
     public function testNewBook(
-        $name,
-        $author,
-        $file,
-        $cover,
-        $datetime,
-        $is_downloadable,
-        $expected
+        string $name,
+        string $author,
+        bool $file,
+        bool $cover,
+        array $datetime,
+        bool $is_downloadable,
+        bool $expected
     )
     {
         $client = static::createClient();
@@ -78,8 +78,8 @@ class BookControllerTest extends WebTestCase
             [
                 'name' => 'Test1',
                 'author' => 'Test1',
-                'file' => '',
-                'cover' => '',
+                'file' => false,
+                'cover' => false,
                 'last_read_datetime' => [
                     'date' => [
                         'day'   => '1',
@@ -91,14 +91,14 @@ class BookControllerTest extends WebTestCase
                         'minute'=> '40'
                     ]
                  ],
-                'is_downloadable' => '1',
+                'is_downloadable' => true,
                 'expected' => true
             ],
             [
                 'name' => 'Test1',
                 'author' => 'Test1',
-                'file' => '',
-                'cover' => '',
+                'file' => false,
+                'cover' => false,
                 'last_read_datetime' => [
                     'date' => [
                         'day'   => '1',
@@ -110,14 +110,14 @@ class BookControllerTest extends WebTestCase
                         'minute'=> '40'
                     ]
                 ],
-                'is_downloadable' => '1',
+                'is_downloadable' => true,
                 'expected' => false
             ],
             [
                 'name' => 'Test2',
                 'author' => 'Test1',
-                'file' => '',
-                'cover' => '',
+                'file' => false,
+                'cover' => false,
                 'last_read_datetime' => [
                     'date' => [
                         'day'   => '1',
@@ -129,7 +129,7 @@ class BookControllerTest extends WebTestCase
                         'minute'=> '30'
                     ]
                 ],
-                'is_downloadable' => '1',
+                'is_downloadable' => false,
                 'expected' => true
             ],
         ];
