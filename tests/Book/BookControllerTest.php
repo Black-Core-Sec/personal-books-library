@@ -10,22 +10,22 @@ class BookControllerTest extends WebTestCase
 {
     public static function tearDownAfterClass(): void
     {
-        $kernel = self::bootKernel();
-        $container = $kernel->getContainer();
-        $repository = $container->get('doctrine')->getRepository(Book::class);
-
-        $additions = (new self)->additionProvider();
-        $testBooksNames = array_map(function ($addition) {
-            return $addition['name'];
-        }, $additions);
-
-        $testBooks = $repository->findBy(
-            ['name' => $testBooksNames]
-        );
-
-        foreach ($testBooks as $testBook) {
-            $repository->remove($testBook);
-        }
+//        $kernel = self::bootKernel();
+//        $container = $kernel->getContainer();
+//        $repository = $container->get('doctrine')->getRepository(Book::class);
+//
+//        $additions = (new self)->additionProvider();
+//        $testBooksNames = array_map(function ($addition) {
+//            return $addition['name'];
+//        }, $additions);
+//
+//        $testBooks = $repository->findBy(
+//            ['name' => $testBooksNames]
+//        );
+//
+//        foreach ($testBooks as $testBook) {
+//            $repository->remove($testBook);
+//        }
     }
 
     /**
@@ -41,6 +41,9 @@ class BookControllerTest extends WebTestCase
         bool $expected
     )
     {
+        $kernel = self::bootKernel();
+        $fileExamplesPath = $kernel->getProjectDir() . '/tests/FileExamples/';
+
         $client = static::createClient();
         $client->followRedirects();
 
@@ -58,8 +61,8 @@ class BookControllerTest extends WebTestCase
         $form = $crawler->selectButton('Save')->form();
         $form['book[name]']    = $name;
         $form['book[author]']  = $author;
-        $form['book[file]']    = $file;
-        $form['book[cover]']   = $cover;
+        !$file ?: $form['book[file]']->upload($fileExamplesPath.'example.txt');
+        !$cover ?: $form['book[cover]']->upload($fileExamplesPath.'example.jpeg');
         $form['book[last_read_datetime]'] = $datetime;
         $form['book[is_downloadable]']     = $is_downloadable;
 
@@ -78,7 +81,7 @@ class BookControllerTest extends WebTestCase
             [
                 'name' => 'Test1',
                 'author' => 'Test1',
-                'file' => false,
+                'file' => true,
                 'cover' => false,
                 'last_read_datetime' => [
                     'date' => [
@@ -116,8 +119,8 @@ class BookControllerTest extends WebTestCase
             [
                 'name' => 'Test2',
                 'author' => 'Test1',
-                'file' => false,
-                'cover' => false,
+                'file' => true,
+                'cover' => true,
                 'last_read_datetime' => [
                     'date' => [
                         'day'   => '1',
