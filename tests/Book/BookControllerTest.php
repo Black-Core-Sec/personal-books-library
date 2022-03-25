@@ -16,7 +16,7 @@ class BookControllerTest extends WebTestCase
 
         $additions = (new self)->additionProvider();
         $testBooksNames = array_map(function ($addition) {
-            return $addition[0];
+            return $addition['name'];
         }, $additions);
 
         $testBooks = $repository->findBy(
@@ -36,40 +36,39 @@ class BookControllerTest extends WebTestCase
         $author,
         $file,
         $cover,
-//        $date,
+        $datetime,
         $is_downloadable,
         $expected
     )
     {
-        $kernel = self::bootKernel();
-        $container = $kernel->getContainer();
-        $repository = $container->get('doctrine')->getRepository(Book::class);
-
         $client = static::createClient();
         $client->followRedirects();
 
         $client->request('GET', '/book/new');
         $this->assertSelectorExists('input#username');
+
         $client->submitForm('_submit', [
             '_username' => 'user',
             '_password' => '123'
         ]);
         $this->assertSelectorTextContains('h1', 'Create new Book');
 
-        $client->submitForm('Save', [
-            'book[name]'    => $name,
-            'book[author]'  => $author,
-            'book[file]'    => $file,
-            'book[cover]'   => $cover,
-//            'book[last_read_datetime]'  => $date,
-            'book[is_downloadable]'     => $is_downloadable
-        ]);
+        $crawler = $client->request('GET', '/book/new');
 
-        $is_saved = $repository->findOneBy(['name' => $name, 'author' => $author]) !== null;
+        $form = $crawler->selectButton('Save')->form();
+        $form['book[name]']    = $name;
+        $form['book[author]']  = $author;
+        $form['book[file]']    = $file;
+        $form['book[cover]']   = $cover;
+        $form['book[last_read_datetime]'] = $datetime;
+        $form['book[is_downloadable]']     = $is_downloadable;
+
+        $crawler = $client->submit($form);
+
         if ($expected) {
-            $this->assertTrue($is_saved);
+            $this->assertSelectorTextContains('h1', 'Book index');
         } else {
-            $this->assertFalse($is_saved);
+            $this->assertSelectorTextContains('h1', 'Create new Book');
         }
     }
 
@@ -77,37 +76,61 @@ class BookControllerTest extends WebTestCase
     {
         return [
             [
-                'Test2',
-                'Test2',
-                '',
-                '',
-//                [
-//                    'date' => [
-//                        'day'   => '01',
-//                        'month' => '01',
-//                        'year'  => '2017',
-//                        'hour'  => '10',
-//                        'minute'=> '30'
-//                    ]
-//                ],
-                '1',
-                true
+                'name' => 'Test1',
+                'author' => 'Test1',
+                'file' => '',
+                'cover' => '',
+                'last_read_datetime' => [
+                    'date' => [
+                        'day'   => '1',
+                        'month' => '2',
+                        'year'  => '2017'
+                    ],
+                    'time' => [
+                        'hour'  => '13',
+                        'minute'=> '40'
+                    ]
+                 ],
+                'is_downloadable' => '1',
+                'expected' => true
             ],
             [
-                'Test2',
-                'Test2',
-                '',
-                '',
-                '1',
-                true
+                'name' => 'Test1',
+                'author' => 'Test1',
+                'file' => '',
+                'cover' => '',
+                'last_read_datetime' => [
+                    'date' => [
+                        'day'   => '1',
+                        'month' => '2',
+                        'year'  => '2017'
+                    ],
+                    'time' => [
+                        'hour'  => '13',
+                        'minute'=> '40'
+                    ]
+                ],
+                'is_downloadable' => '1',
+                'expected' => false
             ],
             [
-                'Test3',
-                'Test2',
-                '',
-                '',
-                '1',
-                true
+                'name' => 'Test2',
+                'author' => 'Test1',
+                'file' => '',
+                'cover' => '',
+                'last_read_datetime' => [
+                    'date' => [
+                        'day'   => '1',
+                        'month' => '2',
+                        'year'  => '2018'
+                    ],
+                    'time' => [
+                        'hour'  => '10',
+                        'minute'=> '30'
+                    ]
+                ],
+                'is_downloadable' => '1',
+                'expected' => true
             ],
         ];
     }
