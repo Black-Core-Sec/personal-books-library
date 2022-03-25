@@ -10,22 +10,22 @@ class BookControllerTest extends WebTestCase
 {
     public static function tearDownAfterClass(): void
     {
-//        $kernel = self::bootKernel();
-//        $container = $kernel->getContainer();
-//        $repository = $container->get('doctrine')->getRepository(Book::class);
-//
-//        $additions = (new self)->additionProvider();
-//        $testBooksNames = array_map(function ($addition) {
-//            return $addition['name'];
-//        }, $additions);
-//
-//        $testBooks = $repository->findBy(
-//            ['name' => $testBooksNames]
-//        );
-//
-//        foreach ($testBooks as $testBook) {
-//            $repository->remove($testBook);
-//        }
+        $kernel = self::bootKernel();
+        $container = $kernel->getContainer();
+        $repository = $container->get('doctrine')->getRepository(Book::class);
+
+        $additions = (new self)->additionProvider();
+        $testBooksNames = array_map(function ($addition) {
+            return $addition['name'];
+        }, $additions);
+
+        $testBooks = $repository->findBy(
+            ['name' => $testBooksNames]
+        );
+
+        foreach ($testBooks as $testBook) {
+            $repository->remove($testBook);
+        }
     }
 
     /**
