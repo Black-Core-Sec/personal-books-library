@@ -1,4 +1,5 @@
 <?php
+declare(strict_types=1);
 
 namespace App\Tests\Book;
 
@@ -75,7 +76,7 @@ class BookControllerTest extends WebTestCase
         }
     }
 
-    public function additionProvider()
+    public function additionProvider(): array
     {
         return [
             [
