@@ -34,16 +34,16 @@ console:
 migrate:
 	docker exec -it bookslib_php-fpm php bin/console doctrine:migrations:migrate --no-interaction
 
+user:
+	docker exec -it bookslib_php-fpm php bin/console fos:user:create
+
 test:
 	#docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:database:drop --force
 	docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:database:create --no-interaction
 	docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:migrations:migrate --no-interaction
 
-fixtures:
-	docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:fixtures:load --no-interaction
-
-user:
-	docker exec -it bookslib_php-fpm php bin/console fos:user:create
-
 testing:
 	docker exec -it bookslib_php-fpm php bin/phpunit
+
+fixtures:
+	docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:fixtures:load --no-interaction
