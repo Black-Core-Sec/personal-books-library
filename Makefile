@@ -1,9 +1,10 @@
+build:
+	docker-compose -f docker-compose.yml --env-file=./docker/.env build --no-cache
+
 up:
 	rm -f ./docker/logs/*.log	rm -f ./docker/logs/*.txt
 	docker-compose -f docker-compose.yml --env-file=./docker/.env up -d
-
-build:
-	docker-compose -f docker-compose.yml --env-file=./docker/.env build --no-cache
+	make migrate
 
 stop:
 	docker-compose -f docker-compose.yml --env-file=./docker/.env stop
@@ -31,7 +32,15 @@ console:
 	docker exec -it bookslib_php-fpm php bin/console $(c)
 
 migrate:
-	docker exec -it bookslib_php-fpm php bin/console doctrine:migrations:migrate
+	docker exec -it bookslib_php-fpm php bin/console doctrine:migrations:migrate --no-interaction
+
+test:
+	#docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:database:drop --force
+	docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:database:create --no-interaction
+	docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:migrations:migrate --no-interaction
+
+fixtures:
+	docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:fixtures:load --no-interaction
 
 user:
 	docker exec -it bookslib_php-fpm php bin/console fos:user:create

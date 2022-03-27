@@ -3,12 +3,26 @@ declare(strict_types=1);
 
 namespace App\Tests\Book;
 
-use App\Controller\BookController;
+use App\Entity\User;
 use App\Entity\Book;
+use App\DataFixtures\UserFixtures;
+use Doctrine\Common\DataFixtures\Loader;
+use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
+use Doctrine\Common\DataFixtures\Purger\ORMPurger;
 use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
 class BookControllerTest extends WebTestCase
 {
+    public static function setUpBeforeClass(): void
+    {
+        $kernel = self::bootKernel();
+        $em = $kernel->getContainer()->get('doctrine.orm.entity_manager');
+        $loader = new Loader();
+        $loader->addFixture(new UserFixtures());
+        $executor = new ORMExecutor($em, (new ORMPurger));
+        $executor->execute($loader->getFixtures());
+    }
+
     public static function tearDownAfterClass(): void
     {
         $kernel = self::bootKernel();
@@ -52,8 +66,8 @@ class BookControllerTest extends WebTestCase
         $this->assertSelectorExists('input#username');
 
         $client->submitForm('_submit', [
-            '_username' => 'user',
-            '_password' => '123'
+            '_username' => UserFixtures::USERNAME,
+            '_password' => UserFixtures::PASSWORD
         ]);
         $this->assertSelectorTextContains('h1', 'Create new Book');
 
