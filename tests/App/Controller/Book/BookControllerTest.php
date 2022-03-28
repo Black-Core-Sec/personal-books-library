@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Tests\Book;
+namespace App\Tests\App\Controller\Book;
 
 use App\Entity\User;
 use App\Entity\Book;

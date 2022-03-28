@@ -1,7 +1,7 @@
 <?php
 declare(strict_types=1);
 
-namespace App\Tests\Book;
+namespace App\Tests\App\EventListener;
 
 use App\Entity\Book;
 use Symfony\Bundle\FrameworkBundle\Test\KernelTestCase;
