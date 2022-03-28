@@ -4,6 +4,7 @@ build:
 up:
 	rm -f ./docker/logs/*.log	rm -f ./docker/logs/*.txt
 	docker-compose -f docker-compose.yml --env-file=./docker/.env up -d
+	echo "Waiting for database started.. (5sec)" && sleep 5s
 	make migrate
 
 stop:
