@@ -20,8 +20,8 @@ security:
     firewalls:
         api:
             pattern: ^/api/v2/
-            anonymous: lazy
-            logout: ~
+            anonymous: false
+            logout: false
             provider: api_users
             guard:
                 authenticators:

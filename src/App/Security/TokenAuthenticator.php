@@ -3,8 +3,8 @@
 namespace App\Security;
 
 use \App\Entity\User;
+use Api\Dto\ApiResponse;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Authentication\Token\TokenInterface;
@@ -15,13 +15,6 @@ use Symfony\Component\Security\Guard\AbstractGuardAuthenticator;
 
 class TokenAuthenticator extends AbstractGuardAuthenticator
 {
-    private $em;
-
-    public function __construct(EntityManagerInterface $em)
-    {
-        $this->em = $em;
-    }
-
     /**
      * Called on every request to decide if this authenticator should be
      * used for the request. Returning `false` will cause this authenticator
@@ -29,7 +22,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function supports(Request $request): bool
     {
-        return $request->headers->has('X-AUTH-TOKEN');
+        return true;
     }
 
     /**
@@ -38,7 +31,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
      */
     public function getCredentials(Request $request)
     {
-        return $request->headers->get('X-AUTH-TOKEN');
+        return $request->headers->has('X-AUTH-TOKEN') ? $request->headers->get('X-AUTH-TOKEN') : false;
     }
 
     public function getUser($credentials, UserProviderInterface $userProvider): ?UserInterface
@@ -84,7 +77,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             // $this->translator->trans($exception->getMessageKey(), $exception->getMessageData())
         ];
 
-        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
+        return new ApiResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
     /**
@@ -97,7 +90,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
             'message' => 'Authentication Required'
         ];
 
-        return new JsonResponse($data, Response::HTTP_UNAUTHORIZED);
+        return new ApiResponse($data, Response::HTTP_UNAUTHORIZED);
     }
 
     public function supportsRememberMe(): bool

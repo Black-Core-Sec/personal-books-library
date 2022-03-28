@@ -3,6 +3,7 @@ declare(strict_types=1);
 
 namespace Api\Controller;
 
+use Api\Dto\ApiResponse;
 use Api\Dto\BookInput;
 use App\Entity\Book;
 use App\Form\BookType;
@@ -40,7 +41,7 @@ class BookController extends AbstractController
         $books = $bookRepository->getAllSortingByLastReadDatetime();
         $booksDtoArray = $bookOutputDataTransformer->transformArray($books);
         $serializedBooks = $this->serializer->serialize($booksDtoArray, 'json');
-        return new JsonResponse($serializedBooks, 200, [], true);
+        return new ApiResponse($serializedBooks, ApiResponse::HTTP_OK, [], true);
     }
 
     /**
@@ -61,16 +62,16 @@ class BookController extends AbstractController
                 $validationErrors = $validator->validate($book);
                 if (count($validationErrors) > 0) {
                     $errorsString = (string) $validationErrors;
-                    return new JsonResponse($this->serializer->serialize($errorsString, 'json'), 400);
+                    return new ApiResponse($this->serializer->serialize($errorsString, 'json'), ApiResponse::HTTP_UNPROCESSABLE_ENTITY);
                 }
                 $bookRepository->add($book);
+                return new ApiResponse('New book added.', ApiResponse::HTTP_OK);
 
-                return new JsonResponse('New book added.', 200);
             } else {
-                return new JsonResponse('Error on adding book.', 400);
+                return new ApiResponse('Error on adding book.', ApiResponse::HTTP_UNPROCESSABLE_ENTITY);
             }
         } catch(\Throwable $exception) {
-            return new JsonResponse('Error on adding book.', 500);
+            return new ApiResponse('Error on adding book.', ApiResponse::HTTP_BAD_REQUEST);
         }
     }
 
@@ -78,7 +79,7 @@ class BookController extends AbstractController
     /**
      * @Route("/{id}/edit", name="api_book_edit", methods={"POST"})
      */
-    public function edit(Request $request, Book $book, BookRepository $bookRepository, ValidatorInterface $validator)
+    public function edit(Request $request, Book $book, BookRepository $bookRepository, ValidatorInterface $validator): JsonResponse
     {
         try {
             $bookDto = $this->serializer->deserialize($request->getContent(), BookInput::class, 'json');
@@ -90,13 +91,13 @@ class BookController extends AbstractController
             $validationErrors = $validator->validate($book);
             if (count($validationErrors) > 0) {
                 $errorsString = (string) $validationErrors;
-                return new JsonResponse($this->serializer->serialize($errorsString, 'json'), 400);
+                return new ApiResponse($this->serializer->serialize($errorsString, 'json'), ApiResponse::HTTP_UNPROCESSABLE_ENTITY);
             }
 
             $bookRepository->add($book);
-            return new JsonResponse('Book updated.', 200);
+            return new ApiResponse('Book updated.', ApiResponse::HTTP_OK);
         } catch (\Throwable $exception) {
-            return new JsonResponse('Error on updating book.', 500);
+            return new ApiResponse('Error on updating book.', ApiResponse::HTTP_NOT_MODIFIED);
         }
     }
 }
