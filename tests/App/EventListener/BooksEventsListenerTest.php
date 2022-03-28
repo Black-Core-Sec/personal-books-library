@@ -53,7 +53,7 @@ class BooksEventsListenerTest extends KernelTestCase
     /**
      * @depends testCreateBookFiles
      */
-    public function testPostRemoveBook()
+    public function testPostRemoveBook(): void
     {
         $this->repository->remove($this->book);
 

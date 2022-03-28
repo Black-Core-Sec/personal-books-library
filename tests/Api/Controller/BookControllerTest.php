@@ -22,7 +22,7 @@ class BookControllerTest extends WebTestCase
         $this->client->followRedirects();
     }
 
-    public function testIndex()
+    public function testIndex(): void
     {
         // Testing on success
         $this->client->request(
@@ -44,7 +44,7 @@ class BookControllerTest extends WebTestCase
         $this->assertJson($this->client->getResponse()->getContent());
     }
 
-    public function testAdd()
+    public function testAdd(): void
     {
         $this->client->request(
             'POST',
@@ -59,7 +59,7 @@ class BookControllerTest extends WebTestCase
         $this->assertJson($this->client->getResponse()->getContent());
     }
 
-    public function testEdit()
+    public function testEdit(): void
     {
         $kernel = self::bootKernel();
         $em = $kernel->getContainer()->get('doctrine.orm.entity_manager');

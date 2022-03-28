@@ -25,7 +25,7 @@ class FileUploader
      * @throws \Exception
      * @throws \Sunrise\Slugger\Exception\ExceptionInterface
      */
-    private function upload(UploadedFile $file, string $target)
+    private function upload(UploadedFile $file, string $target): string
     {
         if (!key_exists($target, $this->directories)) {
             throw new \Exception('File directory is not set.');
@@ -43,7 +43,7 @@ class FileUploader
      * @param UploadedFile $file
      * @return string
      */
-    public function uploadBook(UploadedFile $file)
+    public function uploadBook(UploadedFile $file): string
     {
         return $this->upload($file, 'bookDirectory');
     }
@@ -52,7 +52,7 @@ class FileUploader
      * @param UploadedFile $file
      * @return string
      */
-    public function uploadCover(UploadedFile $file)
+    public function uploadCover(UploadedFile $file): string
     {
         return $this->upload($file, 'coverDirectory');
     }

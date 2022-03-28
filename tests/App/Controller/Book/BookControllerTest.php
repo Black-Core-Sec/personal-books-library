@@ -54,7 +54,7 @@ class BookControllerTest extends WebTestCase
         array $datetime,
         bool $is_downloadable,
         bool $expected
-    )
+    ): void
     {
         $kernel = self::bootKernel();
         $fileExamplesPath = $kernel->getProjectDir() . '/tests/FileExamples/';

@@ -10,7 +10,7 @@ class BookFixtures extends Fixture implements OrderedFixtureInterface
 {
     const REFERENCE = 'book';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $book = (new Book())
             ->setName('TestBook')

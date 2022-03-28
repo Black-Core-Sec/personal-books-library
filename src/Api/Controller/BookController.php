@@ -13,7 +13,6 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 use Api\DataTransformer\BookOutputDataTransformer;
-use Symfony\Component\HttpFoundation\JsonResponse;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 use Symfony\Bundle\FrameworkBundle\Controller\AbstractController;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\ParamConverter;
@@ -36,7 +35,7 @@ class BookController extends AbstractController
      * @Route("/", name="api_book_index", methods={"GET"})
      */
     public function index(BookRepository $bookRepository,
-                          BookOutputDataTransformer $bookOutputDataTransformer): JsonResponse
+                          BookOutputDataTransformer $bookOutputDataTransformer): ApiResponse
     {
         $books = $bookRepository->getAllSortingByLastReadDatetime();
         $booksDtoArray = $bookOutputDataTransformer->transformArray($books);
@@ -47,7 +46,7 @@ class BookController extends AbstractController
     /**
      * @Route("/add", name="api_book_add", methods={"POST"})
      */
-    public function add(Request $request, BookRepository $bookRepository, ValidatorInterface $validator)
+    public function add(Request $request, BookRepository $bookRepository, ValidatorInterface $validator): ApiResponse
     {
         try {
             $book = $this->serializer->deserialize($request->getContent(), Book::class, 'json');
@@ -79,7 +78,7 @@ class BookController extends AbstractController
     /**
      * @Route("/{id}/edit", name="api_book_edit", methods={"POST"})
      */
-    public function edit(Request $request, Book $book, BookRepository $bookRepository, ValidatorInterface $validator): JsonResponse
+    public function edit(Request $request, Book $book, BookRepository $bookRepository, ValidatorInterface $validator): ApiResponse
     {
         try {
             $bookDto = $this->serializer->deserialize($request->getContent(), BookInput::class, 'json');

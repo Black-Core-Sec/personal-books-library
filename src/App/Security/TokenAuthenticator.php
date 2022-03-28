@@ -28,6 +28,7 @@ class TokenAuthenticator extends AbstractGuardAuthenticator
     /**
      * Called on every request. Return whatever credentials you want to
      * be passed to getUser() as $credentials.
+     * @return boolean|string
      */
     public function getCredentials(Request $request)
     {

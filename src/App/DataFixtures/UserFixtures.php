@@ -14,7 +14,7 @@ class UserFixtures extends Fixture implements OrderedFixtureInterface
     public const PASSWORD  = 'testPassword';
     private const EMAIL    = 'test@mail.net';
 
-    public function load(ObjectManager $manager)
+    public function load(ObjectManager $manager): void
     {
         $user = (new User())
             ->setUsername(self::USERNAME)
