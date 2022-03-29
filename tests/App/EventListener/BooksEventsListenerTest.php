@@ -44,17 +44,11 @@ class BooksEventsListenerTest extends KernelTestCase
         !file_exists($this->coverPath) ?: unlink($this->coverPath);
     }
 
-    public function testCreateBookFiles()
+    public function testPostRemoveBook(): void
     {
         $this->assertFileExists($this->filePath);
         $this->assertFileExists($this->coverPath);
-    }
 
-    /**
-     * @depends testCreateBookFiles
-     */
-    public function testPostRemoveBook(): void
-    {
         $this->repository->remove($this->book);
 
         $this->assertFileNotExists($this->filePath);

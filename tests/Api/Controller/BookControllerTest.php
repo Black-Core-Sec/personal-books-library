@@ -52,7 +52,7 @@ class BookControllerTest extends WebTestCase
             [],
             [],
             ['HTTP_X_AUTH_TOKEN' => $this->apiKey],
-            '{"name": "Война и Мир_3", "author": "Лев Толстой", "last_read_datetime": "03-02-2018T10:24:00", "is_downloadable": true}'
+            '{"name": "Война и Мир", "author": "Лев Толстой", "last_read_datetime": "03-02-2018T10:24:00", "is_downloadable": true}'
         );
 
         $this->assertEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
