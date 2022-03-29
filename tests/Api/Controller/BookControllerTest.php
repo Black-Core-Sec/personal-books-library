@@ -40,7 +40,7 @@ class BookControllerTest extends WebTestCase
             '/api/v2/books'
         );
 
-        $this->assertNotEquals(Response::HTTP_OK, $this->client->getResponse()->getStatusCode());
+        $this->assertNotEquals(Response::HTTP_UNAUTHORIZED, $this->client->getResponse()->getStatusCode());
         $this->assertJson($this->client->getResponse()->getContent());
     }
 
