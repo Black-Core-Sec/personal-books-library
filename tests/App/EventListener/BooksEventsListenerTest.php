@@ -15,8 +15,7 @@ class BooksEventsListenerTest extends KernelTestCase
 
     protected function setUp(): void
     {
-        $kernel = self::bootKernel();
-        $container = $kernel->getContainer();
+        $container = (self::bootKernel())->getContainer();
         $this->repository = $container->get('doctrine')->getRepository(Book::class);
 
         $randomString = bin2hex(random_bytes(8));

@@ -2,22 +2,22 @@
 
 namespace App\Tests\Api\Controller;
 
-use App\DataFixtures\BookFixtures;
 use App\Entity\Book;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Loader;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
+use App\DataFixtures\BookFixtures;
+use App\Tests\WebTestCaseWithFixture;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
 
-class BookControllerTest extends WebTestCase
+class BookControllerTest extends WebTestCaseWithFixture
 {
+    private $entityManager;
     private $apiKey;
     private $client;
 
     protected function setUp(): void
     {
-        $this->apiKey = static::bootKernel()->getContainer()->getParameter('api_key');
+        $container = (self::bootKernel())->getContainer();
+        $this->entityManager = $container->get('doctrine.orm.entity_manager');
+        $this->apiKey = $container->getParameter('api_key');
         $this->client = static::createClient();
         $this->client->followRedirects();
     }
@@ -61,12 +61,8 @@ class BookControllerTest extends WebTestCase
 
     public function testEdit(): void
     {
-        $kernel = self::bootKernel();
-        $em = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $loader = new Loader();
-        $loader->addFixture(new BookFixtures());
-        $executor = new ORMExecutor($em, (new ORMPurger));
-        $executor->execute($loader->getFixtures());
+        $executor = self::executeFixture(BookFixtures::class);
+
         /** @var Book $book */
         $book = $executor->getReferenceRepository()->getReference(BookFixtures::REFERENCE);
 

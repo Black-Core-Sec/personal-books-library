@@ -3,37 +3,26 @@ declare(strict_types=1);
 
 namespace App\Tests\App\Controller\Book;
 
-use App\Entity\User;
 use App\Entity\Book;
 use App\DataFixtures\UserFixtures;
-use Doctrine\Common\DataFixtures\Loader;
-use Doctrine\Common\DataFixtures\Executor\ORMExecutor;
-use Doctrine\Common\DataFixtures\Purger\ORMPurger;
-use Symfony\Bundle\FrameworkBundle\Test\WebTestCase;
+use App\Tests\WebTestCaseWithFixture;
 
-class BookControllerTest extends WebTestCase
+class BookControllerTest extends WebTestCaseWithFixture
 {
     public static function setUpBeforeClass(): void
     {
-        $kernel = self::bootKernel();
-        $em = $kernel->getContainer()->get('doctrine.orm.entity_manager');
-        $loader = new Loader();
-        $loader->addFixture(new UserFixtures());
-        $executor = new ORMExecutor($em, (new ORMPurger));
-        $executor->execute($loader->getFixtures());
+        self::executeFixture(UserFixtures::class);
     }
 
     public static function tearDownAfterClass(): void
     {
-        $kernel = self::bootKernel();
-        $container = $kernel->getContainer();
-        $repository = $container->get('doctrine')->getRepository(Book::class);
+        $repository = (self::bootKernel())->getContainer()
+            ->get('doctrine')->getRepository(Book::class);
 
         $additions = (new self)->additionProvider();
         $testBooksNames = array_map(function ($addition) {
             return $addition['name'];
         }, $additions);
-
         $testBooks = $repository->findBy(
             ['name' => $testBooksNames]
         );
@@ -56,8 +45,7 @@ class BookControllerTest extends WebTestCase
         bool $expected
     ): void
     {
-        $kernel = self::bootKernel();
-        $fileExamplesPath = $kernel->getProjectDir() . '/tests/FileExamples/';
+        $fileExamplesPath = (self::bootKernel())->getProjectDir() . '/tests/FileExamples/';
 
         $client = static::createClient();
         $client->followRedirects();
