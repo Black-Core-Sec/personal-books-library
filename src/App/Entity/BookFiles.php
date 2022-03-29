@@ -27,7 +27,7 @@ abstract class BookFiles
         $this->fileRelativeDirectory = $fileRelativeDirectory;
     }
 
-    public function remove(string $filename)
+    public function remove(string $filename): void
     {
         $fullName = $this->fileDirectory . $filename;
         if ($this->filesystem->exists($fullName)) {

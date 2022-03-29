@@ -43,7 +43,7 @@ migrate:
 user:
 	docker exec -it bookslib_php-fpm php bin/console fos:user:create
 
-test:
+testDB:
 	docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:database:drop --force --if-exists
 	docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:database:create --no-interaction --if-not-exists
 	docker exec -it bookslib_php-fpm php bin/console --env=test doctrine:migrations:migrate --no-interaction
