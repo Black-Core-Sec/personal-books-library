@@ -12,7 +12,7 @@ class FileUploader
     private $directories;
     private $slugger;
 
-    public function __construct($directories, Slugger $slugger)
+    public function __construct(array $directories, Slugger $slugger)
     {
         $this->directories = $directories;
         $this->slugger = $slugger;
