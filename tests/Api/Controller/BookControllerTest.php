@@ -9,15 +9,12 @@ use Symfony\Component\HttpFoundation\Response;
 
 class BookControllerTest extends WebTestCaseWithFixture
 {
-    private $entityManager;
     private $apiKey;
     private $client;
 
     protected function setUp(): void
     {
-        $container = (self::bootKernel())->getContainer();
-        $this->entityManager = $container->get('doctrine.orm.entity_manager');
-        $this->apiKey = $container->getParameter('api_key');
+        $this->apiKey = ((self::bootKernel())->getContainer())->getParameter('api_key');
         $this->client = static::createClient();
         $this->client->followRedirects();
     }
